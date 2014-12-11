@@ -17,7 +17,7 @@ class groove {
 		'getCustomers'=>['customers', 'get', [], ['page', 'per_page']],
 		'getCustomer'=>['customers/$$customer_email$$', 'get', [], []],
 		'updateCustomer'=>['customers/$$customer_email$$', 'put', ['email'], ['first_name','last_name','about','twitter_username','title','company_name','phone_number','location','linkedin_username']],
-		// agents
+		// agent
 		'getAgent'=>['agents/$$agent_email$$', 'get', [], []]
 	);
 	private $token;
