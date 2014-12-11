@@ -2,7 +2,7 @@
 
 include_once 'groove.class.php';
 
-$groove = new groove('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+$groove = new groove('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 // $ticket = $groove->getTicket(1);
 // $tickets = $groove->getTickets();
 // $groove->setTicketState(1, 'opened');
