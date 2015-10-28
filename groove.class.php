@@ -21,18 +21,15 @@ class groove {
 		'getAgent'=>['agents/$$agent_email$$', 'get', [], []]
 	);
 	private $token;
-
 	// CONSTRUCTOR
 	public function __construct($token){
 		if(is_null($token))$this->error('Access token required');
 		$this->setAccessToken($token);
 	}
-
 	// ACCESS TOKEN
 	public function setAccessToken($token){
 		$this->token = $token;
 	}
-
 	// DEFAULT METHOD(USING PUBLIC METHODS VARIABLE)
 	public function __call($name, $arguments){
 		// get method parts
@@ -72,7 +69,6 @@ class groove {
 		$result = $this->request($full_endpoint, $call_method, $full_arguments);
 		return $result;
 	}
-
 	// REQUEST CONTROL
 	private function request($url, $method='get', $data=array()){
 		$data['access_token'] = $this->token;
@@ -84,7 +80,8 @@ class groove {
 		$protocol_version = "1.0";
 		$opts = array('http' => compact('content', 'header', 'method'));
 		$context = stream_context_create($opts);
-		$result = file_get_contents($url, false, $context);
+		$result = @file_get_contents($url, false, $context);
+		if($result === false)throw new Exception('Request failed: '.$url);
 		$result = $this->handleResult($result);
 		return $result;
 	}
@@ -98,10 +95,9 @@ class groove {
 		$result = json_decode($result, false);
 		return $result;
 	}
-
 	// ERROR CONTROL
 	private function error($msg='Unknown error'){
-		echo 'Error: '.$msg;
+		throw new Exception($msg);
 		return false;
 	}
 }
