@@ -6,6 +6,7 @@ class groove {
 	public $sep = '/';
 	public $method = array(
 		// tickets
+		'createTicket'=>['tickets', 'post', ['body', 'from', 'to'], ['assigned_group', 'assignee', 'sent_at', 'note', 'send_copy_to_customer', 'state', 'subject', 'tags', 'name']],
 		'getTickets'=>['tickets', 'get', [], ['assignee', 'customer', 'page', 'per_page', 'state']],
 		'getTicket'=>['tickets/$$ticket_number$$', 'get', [], []],
 		'getTicketState'=>['tickets/$$ticket_number$$/state', 'get', [], []],
@@ -16,7 +17,7 @@ class groove {
 		// customers
 		'getCustomers'=>['customers', 'get', [], ['page', 'per_page']],
 		'getCustomer'=>['customers/$$customer_email$$', 'get', [], []],
-		'updateCustomer'=>['customers/$$customer_email$$', 'put', ['email'], ['first_name','last_name','about','twitter_username','title','company_name','phone_number','location','linkedin_username']],
+		'updateCustomer'=>['customers/$$customer_email$$', 'put', ['email'], ['first_name', 'last_name', 'about', 'twitter_username', 'title', 'company_name', 'phone_number', 'location', 'linkedin_username']],
 		// agent
 		'getAgent'=>['agents/$$agent_email$$', 'get', [], []]
 	);
@@ -57,7 +58,7 @@ class groove {
 			return $this->error("Missing variable '".$required_params[$arg_count]."' in method $name");
 		$full_arguments = array();
 		foreach($arguments as $value){
-			if(is_array($value)){
+			if(is_array($value) && empty($required_params)){
 				$full_arguments = array_merge($full_arguments, $value);
 			} else {
 				if(!empty($required_params))$key = array_shift($required_params);
@@ -81,7 +82,7 @@ class groove {
 		$opts = array('http' => compact('content', 'header', 'method'));
 		$context = stream_context_create($opts);
 		$result = @file_get_contents($url, false, $context);
-		if($result === false)throw new Exception('Request failed: '.$url);
+		if($result === false)throw new \Exception('Request failed: '.$url);
 		$result = $this->handleResult($result);
 		return $result;
 	}
@@ -92,12 +93,12 @@ class groove {
 		return $result;
 	}
 	private function parseResult($result){
-		$result = json_decode($result, false);
+		$result = json_decode($result, true);
 		return $result;
 	}
 	// ERROR CONTROL
 	private function error($msg='Unknown error'){
-		throw new Exception($msg);
+		throw new \Exception($msg);
 		return false;
 	}
 }
